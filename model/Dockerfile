@@ -8,8 +8,8 @@ WORKDIR /app
 COPY . /app
 
 # Install system-level dependencies
-RUN apt-get update && apt-get install -y \
-    && rm -rf /var/lib/apt/lists/*
+RUN yum update -y && yum install -y \
+    && yum clean all
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
