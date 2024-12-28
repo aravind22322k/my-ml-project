@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/your-repo/my-ml-project.git'
+                git 'https://github.com/aravind22322k/my-ml-project.git'
             }
         }
 
