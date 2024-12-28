@@ -6,4 +6,4 @@ def preprocess_data(input_path, output_path):
     data.to_csv(output_path, index=False)
 
 if __name__ == "__main__":
-    preprocess_data("data/raw_data.csv", "data/processed_data.csv")
+    preprocess_data("data/iris.csv", "data/processed_data.csv")
