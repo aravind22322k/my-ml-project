@@ -4,37 +4,64 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/aravind22322k/my-ml-project.git'
+                git branch: 'main', 
+                    credentialsId: 'aravind22322k', 
+                    url: 'https://github.com/aravind22322k/my-ml-project.git'
+            }
+        }
+
+        stage('Setup Environment') {
+            steps {
+                sh '''
+                python3 -m venv venv
+                source venv/bin/activate
+                pip install --upgrade pip
+                '''
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip install -r requirements.txt'
+                sh '''
+                source venv/bin/activate
+                pip install -r requirements.txt
+                '''
             }
         }
 
         stage('Preprocess Data') {
             steps {
-                sh 'python scripts/preprocess.py'
+                sh '''
+                source venv/bin/activate
+                python scripts/preprocess.py
+                '''
             }
         }
 
         stage('Train Model') {
             steps {
-                sh 'python scripts/train.py'
+                sh '''
+                source venv/bin/activate
+                python scripts/train.py
+                '''
             }
         }
 
         stage('Evaluate Model') {
             steps {
-                sh 'python scripts/evaluate.py'
+                sh '''
+                source venv/bin/activate
+                python scripts/evaluate.py
+                '''
             }
         }
 
         stage('Deploy Model') {
             steps {
-                sh 'python scripts/deploy.py'
+                sh '''
+                source venv/bin/activate
+                python scripts/deploy.py
+                '''
             }
         }
     }
