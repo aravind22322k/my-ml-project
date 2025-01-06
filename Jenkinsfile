@@ -16,25 +16,25 @@ pipeline {
 
         stage('Preprocess Data') {
             steps {
-                sh 'python scripts/preprocess.py'
+                sh 'python3 scripts/preprocess.py'
             }
         }
 
         stage('Train Model') {
             steps {
-                sh 'python scripts/train.py'
+                sh 'python3 scripts/train.py'
             }
         }
 
         stage('Evaluate Model') {
             steps {
-                sh 'python scripts/evaluate.py'
+                sh 'python3 scripts/evaluate.py'
             }
         }
 
         stage('Deploy Model') {
             steps {
-                sh 'python scripts/deploy.py'
+                sh 'python3 scripts/deploy.py'
             }
         }
     }
