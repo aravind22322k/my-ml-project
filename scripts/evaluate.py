@@ -5,8 +5,8 @@ from sklearn.metrics import accuracy_score
 def evaluate_model(model_path, test_data_path):
     model = joblib.load(model_path)
     data = pd.read_csv(test_data_path)
-    X = data.drop("target", axis=1)
-    y = data["target"]
+    X = data.drop("class", axis=1)
+    y = data["class"]
     predictions = model.predict(X)
     accuracy = accuracy_score(y, predictions)
     print(f"Model Accuracy: {accuracy}")
