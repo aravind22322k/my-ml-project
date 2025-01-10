@@ -1,6 +1,7 @@
 import pickle
 import numpy as np
 from flask import Flask, request, jsonify
+from urllib.parse import quote as url_quote  # Updated import for URL quoting
 
 # Initialize Flask application
 app = Flask(__name__)
