@@ -8,11 +8,15 @@ WORKDIR /app
 COPY . /app
 
 # Install system-level dependencies
-RUN yum update -y && yum install -y \
-    && yum clean all
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Set up the command to run scripts (you can override this)
-CMD ["bash"]
+# Expose the port your Flask app runs on
+EXPOSE 5000
+
+# Set the command to run the Flask app
+CMD ["python", "app.py"]
