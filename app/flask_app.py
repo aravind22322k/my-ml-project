@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify
 import pickle
 import numpy as np
+from flask import Flask, request, jsonify
+from urllib.parse import quote as url_quote  # Updated import for URL quoting
 
-# Initialize the Flask application
+# Initialize Flask application
 app = Flask(__name__)
 
 # Load the pre-trained model
@@ -10,47 +11,29 @@ MODEL_PATH = "model.pkl"
 with open(MODEL_PATH, "rb") as file:
     model = pickle.load(file)
 
-# Define the route for predictions
-@app.route('/predict', methods=['POST'])
+@app.route("/")
+def index():
+    return jsonify({"message": "Model API is running"}), 200
+
+@app.route("/predict", methods=["POST"])
 def predict():
     """
-    Endpoint to make predictions.
-    Expects JSON input with 'sepal_length', 'sepal_width', 'petal_length', 'petal_width'.
+    Predict endpoint for the model
+    Expects JSON input: {"features": [value1, value2, ...]}
     """
     try:
-        # Parse input JSON
+        # Get the input data
         data = request.get_json()
-        sepal_length = data['sepal_length']
-        sepal_width = data['sepal_width']
-        petal_length = data['petal_length']
-        petal_width = data['petal_width']
+        features = data["features"]
 
-        # Create feature array
-        features = np.array([[sepal_length, sepal_width, petal_length, petal_width]])
+        # Convert input to numpy array and make a prediction
+        prediction = model.predict(np.array(features).reshape(1, -1))
 
-        # Make prediction
-        prediction = model.predict(features)
-        predicted_class = prediction[0]
+        # Return prediction as JSON
+        return jsonify({"prediction": prediction.tolist()}), 200
 
-        # Return response
-        return jsonify({
-            'prediction': predicted_class,
-            'success': True
-        })
     except Exception as e:
-        return jsonify({
-            'error': str(e),
-            'success': False
-        })
+        return jsonify({"error": str(e)}), 400
 
-# Define a health check route
-@app.route('/', methods=['GET'])
-def health_check():
-    """
-    Health check endpoint to verify the app is running.
-    """
-    return jsonify({'message': 'Iris Prediction API is running', 'success': True})
-
-# Run the Flask app
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
